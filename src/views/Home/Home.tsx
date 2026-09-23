@@ -6,13 +6,18 @@ import Header from "../../components/Header/Header";
 
 const AddFood = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Header />
-      <Text>Home</Text>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    padding: 12,
+  },
+});
 
 export default AddFood;
