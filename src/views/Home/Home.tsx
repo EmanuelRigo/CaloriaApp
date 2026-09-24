@@ -2,16 +2,25 @@ import React from "react";
 
 import { View, Text, StyleSheet } from "react-native";
 
+import { Button } from "@rneui/themed";
+
 import Header from "../../components/Header/Header";
 
 const Home = () => {
   return (
     <View style={styles.container}>
       <Header />
-      <View>
+
+      <View style={styles.content}>
         <View style={styles.leftContainer}>
           <Text>Calories</Text>
+
+          <Button
+            title="Add calories"
+            onPress={() => console.log("Button pressed")}
+          />
         </View>
+
         <View style={styles.rightContainer}></View>
       </View>
     </View>
@@ -23,6 +32,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 12,
+  },
+  content: {
+    flex: 1,
+    flexDirection: "row",
   },
   leftContainer: {
     flex: 1,
