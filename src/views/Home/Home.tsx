@@ -5,11 +5,14 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import Header from "../../components/Header/Header";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../../types";
 
 const Home = () => {
-  const { navigation } = useNavigation();
+  const { navigate } =
+    useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
   const handleAddCaloriesPress = () => {
-    console.log("Add calories button pressed");
+    navigate("AddFood");
   };
   return (
     <View style={styles.container}>

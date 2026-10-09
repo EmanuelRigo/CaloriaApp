@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const staticInfo = {
   name: "Juan Ortiz",
@@ -7,8 +9,14 @@ const staticInfo = {
 };
 
 const Header = () => {
+  const { canGoBack, goBack } = useNavigation();
   return (
     <View style={styles.container}>
+      {canGoBack() && (
+        <Pressable onPress={goBack} style={styles.arrowBackContainer}>
+          <MaterialIcons name="arrow-back" size={24} color="black" />
+        </Pressable>
+      )}
       <View style={styles.leftContainer}>
         <Text style={styles.name}>{`Hello ${staticInfo.name}`}</Text>
         <Text style={styles.subtitle}>Welcome back to your goal!</Text>
@@ -22,6 +30,7 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   container: { flexDirection: "row" },
+  arrowBackContainer: { marginLeft: -4 },
   leftContainer: { flex: 1, justifyContent: "center" },
   rightContainer: { flex: 1, alignItems: "flex-end", justifyContent: "center" },
   name: { fontSize: 14, fontWeight: "bold" },
