@@ -30,7 +30,11 @@ const Header = () => {
 
 const styles = StyleSheet.create({
   container: { flexDirection: "row" },
-  arrowBackContainer: { marginLeft: -4 },
+  arrowBackContainer: {
+    marginLeft: -4,
+    paddingRight: 8,
+    justifyContent: "center",
+  },
   leftContainer: { flex: 1, justifyContent: "center" },
   rightContainer: { flex: 1, alignItems: "flex-end", justifyContent: "center" },
   name: { fontSize: 14, fontWeight: "bold" },
