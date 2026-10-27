@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import Header from "../../components/Header/Header";
 import Input from "../../components/Input";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const AddFood = () => {
   const [foodName, setFoodName] = useState("");
@@ -24,8 +25,19 @@ const AddFood = () => {
     >
       <Header />
       <View style={styles.addFoodContainer}>
-        <View style={styles.legendContainer}> </View>
-        <View style={styles.addFoodBtnContainer}></View>
+        <View style={styles.legendContainer}>
+          <Text style={styles.addFoodLegend}>Add Food</Text>
+        </View>
+        <View style={styles.addFoodBtnContainer}>
+          <Pressable style={styles.button} onPress={handleSubmit}>
+            <MaterialIcons
+              style={styles.buttonText}
+              name="arrow-back"
+              size={24}
+              color="black"
+            />
+          </Pressable>
+        </View>
       </View>
     </ScrollView>
   );
@@ -36,10 +48,35 @@ const styles = StyleSheet.create({
   contentContainer: { padding: 12 },
   addFoodContainer: {
     marginVertical: 24,
+    flex: 1,
+
+    flexDirection: "row",
   },
   addFoodLegend: { fontSize: 20, fontWeight: "bold" },
-  legendContainer: {},
-  addFoodBtnContainer: {},
+  legendContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  addFoodBtnContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#4ecb71",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+  },
 });
 
 export default AddFood;
