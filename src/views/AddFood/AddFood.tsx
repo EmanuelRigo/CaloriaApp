@@ -39,6 +39,21 @@ const AddFood = () => {
           </Pressable>
         </View>
       </View>
+      <View style={styles.searchContainer}>
+        <Input
+          placeholder="apple, pie, soda..."
+          value={foodName}
+          onChangeText={setFoodName}
+          containerStyle={styles.searchInput}
+        />
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Buscar alimento"
+          style={styles.searchButton}
+        >
+          <MaterialIcons name="search" size={24} color="#fff" />
+        </Pressable>
+      </View>
     </ScrollView>
   );
 };
@@ -76,6 +91,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  searchInput: { flex: 1 },
+  searchButton: {
+    width: 48,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4ecb71",
+    borderRadius: 10,
   },
 });
 
