@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import Header from "../../components/Header/Header";
 import Input from "../../components/Input";
 import { MaterialIcons } from "@expo/vector-icons";
+import AddFoodModal from "../../components/AddFoodModal";
 
 const AddFood = () => {
   const [foodName, setFoodName] = useState("");
@@ -16,6 +17,11 @@ const AddFood = () => {
   const handleSubmit = () => {
     setHasSubmitted(true);
   };
+  const handleModalClose = () => {
+    setVisible(false);
+  };
+
+  const [visible, setVisible] = useState<boolean>(false);
 
   return (
     <ScrollView
@@ -50,10 +56,16 @@ const AddFood = () => {
           accessibilityRole="button"
           accessibilityLabel="Buscar alimento"
           style={styles.searchButton}
+          onPress={() => {
+            console.log("Buscar alimentos");
+            setVisible(true);
+            console.log("Modal visible:", visible);
+          }}
         >
-          <MaterialIcons name="search" size={24} color="#fff" />
+          <MaterialIcons name="add" size={24} color="#fff" />
         </Pressable>
       </View>
+      <AddFoodModal visible={visible} onClose={handleModalClose} />
     </ScrollView>
   );
 };
