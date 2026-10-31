@@ -36,7 +36,14 @@ const useFoodStorage = () => {
     }
   };
 
-  const handleGetFoods = () => {};
+  const handleGetFoods = async () => {
+    try {
+      const foods = await AsyncStorage.getItem(MY_FOOD_KEY);
+
+      if (foods !== null) {
+      }
+    } catch (error) {}
+  };
 
   return {
     onSaveFood: handleSaveFood,
