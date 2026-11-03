@@ -41,6 +41,8 @@ const useFoodStorage = () => {
       const foods = await AsyncStorage.getItem(MY_FOOD_KEY);
 
       if (foods !== null) {
+        const foodsParsed = JSON.parse(foods);
+        return Promise.resolve(foodsParsed);
       }
     } catch (error) {}
   };

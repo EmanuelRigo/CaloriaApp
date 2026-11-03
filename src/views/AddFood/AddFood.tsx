@@ -1,14 +1,25 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Alert,
+} from "react-native";
 import Header from "../../components/Header/Header";
 import Input from "../../components/Input";
 import { MaterialIcons } from "@expo/vector-icons";
 import AddFoodModal from "../../components/AddFoodModal";
+import useFoodStorage from "../../hooks/useFoodStorage";
 
 const AddFood = () => {
   const [foodName, setFoodName] = useState("");
   const [calories, setCalories] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [visible, setVisible] = useState<boolean>(false);
+  const { onGetFoods } = useFoodStorage();
+
   const foodNameError =
     hasSubmitted && !foodName.trim() ? "Ingresa el nombre del alimento." : "";
   const caloriesError =
@@ -17,11 +28,18 @@ const AddFood = () => {
   const handleSubmit = () => {
     setHasSubmitted(true);
   };
-  const handleModalClose = () => {
+  const handleModalClose = async (shouldUpdate?: boolean) => {
+    if (shouldUpdate) {
+      Alert.alert("Comida guardada exitosamente");
+      try {
+        const foodsResponse = await onGetFoods();
+        console.log("Foods retrieved:", foodsResponse);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     setVisible(false);
   };
-
-  const [visible, setVisible] = useState<boolean>(false);
 
   return (
     <ScrollView

@@ -2,9 +2,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import React, { FC, useEffect, useState } from "react";
 import { Modal, View, StyleSheet, Pressable, Text } from "react-native";
 import Input from "../Input";
+import useFoodStorage from "../../hooks/useFoodStorage";
 
 type AddFoodModalProps = {
-  onClose: () => void;
+  onClose: (shouldUpdate?: boolean) => void;
   visible: boolean;
 };
 
@@ -12,23 +13,33 @@ const AddFoodModal: FC<AddFoodModalProps> = ({ visible, onClose }) => {
   const [calories, setCalories] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [portion, setPortion] = useState<string>("");
+  const { onSaveFood } = useFoodStorage();
+
   useEffect(() => {
     setCalories("");
     setName("");
     setPortion("");
   }, [visible]);
 
-  const handleAddPress = () => {
-    setCalories("");
-    setName("");
-    setPortion("");
+  const handleAddPress = async () => {
+    try {
+      await onSaveFood({
+        calories,
+        name,
+        portion,
+      });
+      onClose(true);
+    } catch (error) {
+      console.error(error);
+    }
+
     onClose();
   };
 
   return (
     <Modal
       visible={visible}
-      onRequestClose={onClose}
+      onRequestClose={() => onClose()}
       animationType="slide"
       transparent
     >
@@ -39,7 +50,7 @@ const AddFoodModal: FC<AddFoodModalProps> = ({ visible, onClose }) => {
               accessibilityRole="button"
               accessibilityLabel="Cerrar modal"
               style={styles.closeButton}
-              onPress={onClose}
+              onPress={() => onClose()}
             >
               <MaterialIcons name="close" size={28} color="#000000" />
             </Pressable>
