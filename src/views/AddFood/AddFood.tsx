@@ -12,13 +12,25 @@ import Input from "../../components/Input";
 import { MaterialIcons } from "@expo/vector-icons";
 import AddFoodModal from "../../components/AddFoodModal";
 import useFoodStorage from "../../hooks/useFoodStorage";
+import { Meal } from "../../types";
 
 const AddFood = () => {
   const [foodName, setFoodName] = useState("");
   const [calories, setCalories] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [visible, setVisible] = useState<boolean>(false);
+  const { foods, setFoods } = useState<Meal[]>([]); // Assuming Meal is the type for food items
   const { onGetFoods } = useFoodStorage();
+
+  const loadFoods = async () => {
+    try {
+      const foodsResponse = await onGetFoods();
+      setFoods(foodsResponse);
+      console.log("Foods retrieved:", foodsResponse);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const foodNameError =
     hasSubmitted && !foodName.trim() ? "Ingresa el nombre del alimento." : "";
@@ -31,12 +43,7 @@ const AddFood = () => {
   const handleModalClose = async (shouldUpdate?: boolean) => {
     if (shouldUpdate) {
       Alert.alert("Comida guardada exitosamente");
-      try {
-        const foodsResponse = await onGetFoods();
-        console.log("Foods retrieved:", foodsResponse);
-      } catch (error) {
-        console.error(error);
-      }
+      loadFoods();
     }
     setVisible(false);
   };
