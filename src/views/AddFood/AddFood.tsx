@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import AddFoodModal from "../../components/AddFoodModal";
 import useFoodStorage from "../../hooks/useFoodStorage";
 import { Meal } from "../../types";
+import MealItem from "../../components/MealItem";
 
 const AddFood = () => {
   const [foodName, setFoodName] = useState("");
@@ -47,6 +48,10 @@ const AddFood = () => {
     }
     setVisible(false);
   };
+
+  useEffect(() => {
+    loadFoods().catch(null);
+  }, []);
 
   return (
     <ScrollView
@@ -90,6 +95,11 @@ const AddFood = () => {
           <MaterialIcons name="add" size={24} color="#fff" />
         </Pressable>
       </View>
+      <ScrollView style={styles.content}>
+        {foods?.map((meal) => (
+          <MealItem key={`my-meal-item-${meal.name}`} {...meal} />
+        ))}
+      </ScrollView>
       <AddFoodModal visible={visible} onClose={handleModalClose} />
     </ScrollView>
   );
@@ -97,6 +107,7 @@ const AddFood = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
+  content: {},
   contentContainer: { padding: 12 },
   addFoodContainer: {
     marginVertical: 24,
