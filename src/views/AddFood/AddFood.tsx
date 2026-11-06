@@ -20,7 +20,8 @@ const AddFood = () => {
   const [calories, setCalories] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const { foods, setFoods } = useState<Meal[]>([]); // Assuming Meal is the type for food items
+  const [foods, setFoods] = useState<Meal[]>([]); // Assuming Meal is the type for food items
+  const [search, setSearch] = useState<string>("");
   const { onGetFoods } = useFoodStorage();
 
   const loadFoods = async () => {
@@ -29,6 +30,7 @@ const AddFood = () => {
       setFoods(foodsResponse);
       console.log("Foods retrieved:", foodsResponse);
     } catch (error) {
+      console.error("Error retrieving foods:", error);
       console.error(error);
     }
   };
@@ -52,6 +54,20 @@ const AddFood = () => {
   useEffect(() => {
     loadFoods().catch(null);
   }, []);
+
+  const handleSearchPress = async () => {
+    try {
+      const result = await onGetFoods();
+      setFoods(
+        result.filter((item: Meal) =>
+          item.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+        ),
+      );
+    } catch (error) {
+      console.error("Error searching foods:", error);
+      setFoods([]); // Clear the foods list on error
+    }
+  };
 
   return (
     <ScrollView
@@ -78,8 +94,8 @@ const AddFood = () => {
       <View style={styles.searchContainer}>
         <Input
           placeholder="apple, pie, soda..."
-          value={foodName}
-          onChangeText={setFoodName}
+          value={search}
+          onChangeText={(text: string) => setSearch(text)}
           containerStyle={styles.searchInput}
         />
         <Pressable
@@ -94,9 +110,17 @@ const AddFood = () => {
         >
           <MaterialIcons name="add" size={24} color="#fff" />
         </Pressable>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Buscar alimento"
+          style={styles.searchButton}
+          onPress={handleSearchPress}
+        >
+          <MaterialIcons name="search" size={24} color="#fff" />
+        </Pressable>
       </View>
       <ScrollView style={styles.content}>
-        {foods?.map((meal) => (
+        {foods?.map((meal: Meal) => (
           <MealItem key={`my-meal-item-${meal.name}`} {...meal} />
         ))}
       </ScrollView>

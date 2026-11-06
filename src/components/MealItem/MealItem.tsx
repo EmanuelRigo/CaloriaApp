@@ -32,14 +32,23 @@ const MealItem: FC<Meal> = ({ calories, name, portion }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
-  leftContainer: {},
-  rightContainer: {},
-  name: {},
-  portion: {},
-  calories: {},
+  container: {
+    backgroundColor: "#ade8af",
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+    flexDirection: "row",
+  },
+  leftContainer: { flex: 1, justifyContent: "center" },
+  rightContainer: { flex: 1, justifyContent: "center", alignItems: "flex-end" },
+  name: {
+    fontSize: 18,
+    fontWeight: 500,
+  },
+  portion: { fontSize: 13, color: "#808080", fontWeight: 500 },
+  calories: { fontSize: 18, fontWeight: 500 },
   button: {},
-  buttonText: {},
+  buttonText: { marginBottom: -8, marginRight: 4 },
 });
 
 export default MealItem;
