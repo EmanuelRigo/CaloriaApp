@@ -1,10 +1,21 @@
 import { FC } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 
 import { Meal } from "../../types";
 import { MaterialIcons } from "@expo/vector-icons";
+import useFoodStorage from "../../hooks/useFoodStorage";
 
 const MealItem: FC<Meal> = ({ calories, name, portion }) => {
+  const { onSaveTodayFood } = useFoodStorage();
+  const handleAddItemPress = async () => {
+    try {
+      await onSaveTodayFood({ calories, name, portion });
+      Alert.alert("Comida agregada a la lista de hoy");
+    } catch (error) {
+      console.error("Error al agregar la comida:", error);
+      Alert.alert("Error al agregar la comida");
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
@@ -12,12 +23,7 @@ const MealItem: FC<Meal> = ({ calories, name, portion }) => {
         <Text style={styles.portion}>{portion}</Text>
       </View>
       <View style={styles.rightContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={() => {
-            console.log("Pressed");
-          }}
-        >
+        <Pressable style={styles.button} onPress={handleAddItemPress}>
           <MaterialIcons
             style={styles.buttonText}
             name="add-circle-outline"

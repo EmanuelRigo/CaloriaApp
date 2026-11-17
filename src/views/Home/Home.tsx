@@ -1,19 +1,47 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
 import Header from "../../components/Header/Header";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../../types";
+import { Meal, RootStackParamList } from "../../types";
+import useFoodStorage from "../../hooks/useFoodStorage";
 
 const Home = () => {
+  const [todayFoods, setTodayFoods] = useState<Meal[]>([]);
+
+  const { onGetTodayFoods } = useFoodStorage();
+
   const { navigate } =
     useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
+
+  const loadTodayFoods = useCallback(async () => {
+    try {
+      const todayFoodResponse = await onGetTodayFoods();
+
+      // Evita re-render si los datos no cambiaron
+      setTodayFoods((prev) =>
+        JSON.stringify(prev) === JSON.stringify(todayFoodResponse)
+          ? prev
+          : todayFoodResponse,
+      );
+    } catch (error) {
+      console.error("Error loading today's foods:", error);
+    }
+  }, [onGetTodayFoods]);
+
+  useFocusEffect(
+    useCallback(() => {
+      void loadTodayFoods();
+    }, [loadTodayFoods]),
+  );
+
   const handleAddCaloriesPress = () => {
     navigate("AddFood");
   };
+
   return (
     <View style={styles.container}>
       <Header />
@@ -65,7 +93,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
   },
-
   buttonText: {
     color: "#fff",
     fontSize: 16,
