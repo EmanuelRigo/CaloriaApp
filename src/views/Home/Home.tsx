@@ -8,25 +8,41 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Meal, RootStackParamList } from "../../types";
 import useFoodStorage from "../../hooks/useFoodStorage";
+import TodayCalories from "../../components/TodayCalories";
+import { TodayCaloriesProps } from "../../components/TodayCalories/TodayCalories";
 
 const Home = () => {
   const [todayFoods, setTodayFoods] = useState<Meal[]>([]);
+  const [todayStadistics, setTodayStatistics] = useState<TodayCaloriesProps>(
+    {},
+  );
 
   const { onGetTodayFoods } = useFoodStorage();
 
   const { navigate } =
     useNavigation<StackNavigationProp<RootStackParamList, "Home">>();
 
+  const calculateTodayStatistics = (meals: Meal[]) => {
+    try {
+    } catch (error) {
+      console.error("Error calculating today's statistics:", error);
+    }
+  };
+
   const loadTodayFoods = useCallback(async () => {
     try {
-      const todayFoodResponse = await onGetTodayFoods();
+      const todayFoodResponse = (await onGetTodayFoods()) as Meal[];
+      calculateTodayStatistics(todayFoodResponse);
 
+      console.log("Today's foods:", todayFoodResponse);
+      setTodayFoods(todayFoodResponse);
       // Evita re-render si los datos no cambiaron
-      setTodayFoods((prev) =>
-        JSON.stringify(prev) === JSON.stringify(todayFoodResponse)
-          ? prev
-          : todayFoodResponse,
-      );
+
+      // setTodayFoods((prev) =>
+      //   JSON.stringify(prev) === JSON.stringify(todayFoodResponse)
+      //     ? prev
+      //     : todayFoodResponse,
+      // );
     } catch (error) {
       console.error("Error loading today's foods:", error);
     }
@@ -58,6 +74,9 @@ const Home = () => {
             <MaterialIcons name="add" size={20} color="white" />
           </Pressable>
         </View>
+      </View>
+      <View>
+        <TodayCalories total="2000" consumed="1200" remaining="800" />
       </View>
     </View>
   );
