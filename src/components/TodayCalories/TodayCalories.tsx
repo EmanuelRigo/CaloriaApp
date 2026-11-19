@@ -9,15 +9,15 @@ export type TodayCaloriesProps = {
 };
 
 const TodayCalories: FC<TodayCaloriesProps> = ({
-  total,
-  consumed,
-  remaining,
-  percentage,
+  total = 2000,
+  consumed = 0,
+  remaining = 0,
+  percentage = 0,
 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.leftContainer}>
-        <Text>Text circle</Text>
+        <Text>{total}</Text>
       </View>
       <View style={styles.rightContainer}>
         <Text style={styles.today}>Today</Text>

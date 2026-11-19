@@ -10,6 +10,9 @@ import { Meal, RootStackParamList } from "../../types";
 import useFoodStorage from "../../hooks/useFoodStorage";
 import TodayCalories from "../../components/TodayCalories";
 import { TodayCaloriesProps } from "../../components/TodayCalories/TodayCalories";
+import TodayMeals from "../../components/TodayMeals";
+
+const totalCaloriesPerDay = 2000;
 
 const Home = () => {
   const [todayFoods, setTodayFoods] = useState<Meal[]>([]);
@@ -24,6 +27,19 @@ const Home = () => {
 
   const calculateTodayStatistics = (meals: Meal[]) => {
     try {
+      const caloriesConsumed = meals.reduce(
+        (acum, curr) => acum + Number(curr.calories),
+        0,
+      );
+      const remainingCalories = totalCaloriesPerDay - caloriesConsumed;
+      const percentage = (caloriesConsumed / totalCaloriesPerDay) * 100;
+
+      setTodayStatistics({
+        total: totalCaloriesPerDay,
+        consumed: caloriesConsumed,
+        remaining: remainingCalories,
+        percentage,
+      });
     } catch (error) {
       console.error("Error calculating today's statistics:", error);
     }
@@ -34,7 +50,7 @@ const Home = () => {
       const todayFoodResponse = (await onGetTodayFoods()) as Meal[];
       calculateTodayStatistics(todayFoodResponse);
 
-      console.log("Today's foods:", todayFoodResponse);
+      console.log("Today's foods2:", todayFoodResponse);
       setTodayFoods(todayFoodResponse);
       // Evita re-render si los datos no cambiaron
 
@@ -46,7 +62,7 @@ const Home = () => {
     } catch (error) {
       console.error("Error loading today's foods:", error);
     }
-  }, [onGetTodayFoods]);
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
@@ -76,7 +92,8 @@ const Home = () => {
         </View>
       </View>
       <View>
-        <TodayCalories total="2000" consumed="1200" remaining="800" />
+        <TodayCalories {...todayStadistics} />
+        <TodayMeals foods={todayFoods} />
       </View>
     </View>
   );
